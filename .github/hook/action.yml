@@ -1,0 +1,24 @@
+---
+
+inputs:
+  calling-job-context:
+    description: A JSON string with the calling job's inputs
+    type: string
+  current-job-steps:
+    description: A JSON string with this job's steps so far
+    type: string
+  job-dependencies-context:
+    default: >-
+      {}
+    description: A JSON string with the calling workflow's `needs` context
+    required: false
+    type: string
+
+runs:
+  using: composite
+  steps:
+  - name: Do whatever you want
+    if: >-
+      !cancelled()
+      && fromJSON(inputs.calling-job-context).python-version == '3.14'
+    run: echo '3.14 :party:'

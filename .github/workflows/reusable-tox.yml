@@ -31,3 +31,16 @@ jobs:
 
     - name: Grab the source from Git
       uses: actions/checkout@v5
+
+    - name: 🪝 Invoke the in-repo hook (if exists)
+      id: hook
+      if: >-
+        !cancelled()
+        && hashFiles(
+          '.github/hook/action.yml'
+        ) != ''
+      uses: ./.github/hook
+      with:
+        calling-job-context: ${{ toJSON(inputs) }}
+        current-job-steps: ${{ toJSON(steps) }}
+        job-dependencies-context: ${{ inputs.job-dependencies-context }}
