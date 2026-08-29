@@ -12,10 +12,22 @@
 
 on:
   workflow_call:
-    inputs: {}
+    inputs:
+      python-version:
+        description: Python version to provision in the VM
+        required: true
+        type: string
 
 jobs:
   tox:
     runs-on: ubuntu-latest
     steps:
-    - run: echo "Build me during Phase A!"
+    - name: >-
+        Switch to using Python v${{ inputs.python-version }}
+        by default
+      uses: actions/setup-python@v6
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Grab the source from Git
+      uses: actions/checkout@v5
